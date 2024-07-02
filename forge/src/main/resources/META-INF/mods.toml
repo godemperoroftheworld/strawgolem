@@ -15,42 +15,49 @@ description = '''
 Adds a helpful lil' straw golem. He's a farmer!
 ''' #mandatory (Supports multiline text)
 [[dependencies.strawgolem]] #optional
-modId = "forge" #mandatory
-mandatory = true #mandatory
-versionRange = "[43,)" #mandatory
-ordering = "NONE" # The order that this dependency should load in relation to your mod, required to be either 'BEFORE' or 'AFTER' if the dependency is not mandatory
-side = "BOTH" # Side this dependency is applied on - 'BOTH', 'CLIENT' or 'SERVER'
+    modId = "forge" #mandatory
+    mandatory = true #mandatory
+    versionRange = "[43,)" #mandatory
+    ordering = "NONE" # The order that this dependency should load in relation to your mod, required to be either 'BEFORE' or 'AFTER' if the dependency is not mandatory
+    side = "BOTH" # Side this dependency is applied on - 'BOTH', 'CLIENT' or 'SERVER'
 [[dependencies.strawgolem]]
-modId = "minecraft"
-mandatory = true
-versionRange = "[1.19,1.19.2)"
-ordering = "NONE"
-side = "BOTH"
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "[1.19,1.19.2)"
+    ordering = "NONE"
+    side = "BOTH"
 [[dependencies.strawgolem]]
-modId = "haybale"
-mandatory = true
-versionRange = "*"
-ordering = "AFTER"
-side = "BOTH"
+    modId = "haybale"
+    mandatory = true
+    versionRange = "*"
+    ordering = "AFTER"
+    side = "BOTH"
 [[dependencies.strawgolem]]
-modId = "geckolib3"
-mandatory = true
-versionRange = "*"
-ordering = "BEFORE"
-side = "BOTH"
+    modId = "geckolib3"
+    mandatory = true
+    versionRange = "*"
+    ordering = "BEFORE"
+    side = "BOTH"
+    [dependencies.strawgolem.mc-publish]
+        ignore = false
+        modrinth="8BmcQJ2H"
+        curseforge="388172"
 [[dependencies.strawgolem]]
-modId = "cloth-config"
-mandatory = false
-versionRange = "*"
-ordering = "BEFORE"
-side = "CLIENT"
+    modId = "cloth_config"
+    mandatory = false
+    versionRange = "*"
+    side = "CLIENT"
+    [dependencies.strawgolem.mc-publish]
+        ignore=false
+        modrinth="9s6osm5g"
+        curseforge="348521"
 [[dependencies.strawgolem]]
-modId = "modmenu"
-mandatory = false
-versionRange = "*"
-side = "CLIENT"
+    modId = "modmenu"
+    mandatory = false
+    versionRange = "*"
+    side = "CLIENT"
 [[dependencies.strawgolem]]
-modId = "jade"
-mandatory = false
-versionRange = "*"
-side = "CLIENT"
+    modId = "jade"
+    mandatory = false
+    versionRange = "*"
+    side = "CLIENT"
