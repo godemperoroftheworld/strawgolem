@@ -42,6 +42,13 @@
         "cloth-config": "*",
         "jade": "*",
         "animal_feeding_trough": "*"
+    },
+    "custom": {
+        "mc-publish": {
+            "dependencies": [
+                "geckolib(required)"
+            ]
+        }
     }
 }
   
