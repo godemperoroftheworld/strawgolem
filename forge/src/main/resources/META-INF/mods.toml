@@ -23,7 +23,7 @@ Adds a helpful lil' straw golem. He's a farmer!
 [[dependencies.strawgolem]]
     modId = "minecraft"
     mandatory = true
-    versionRange = "[1.19,1.19.2)"
+    versionRange = "1.19.3"
     ordering = "NONE"
     side = "BOTH"
 [[dependencies.strawgolem]]

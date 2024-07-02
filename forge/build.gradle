@@ -79,7 +79,7 @@ dependencies {
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.19:${project.geckolib_version_forge}")
     implementation ("me.shedaniel.cloth:cloth-config-forge:${project.cloth_version}")
     implementation fg.deobf("curse.maven:jade-324717:${project.jade_forge_id}")
-    implementation fg.deobf("curse.maven:farmers-delight-398521:${project.farmers_delight_forge_version}")
+//    implementation fg.deobf("curse.maven:farmers-delight-398521:${project.farmers_delight_forge_version}")
     implementation fg.deobf("curse.maven:animal-feeding-trough-445838:${project.feeding_trough_forge_version}")
     implementation fg.deobf("curse.maven:architectury-api-419699:${project.architectury_forge_id}")
     implementation fg.deobf("curse.maven:haybale-919468:${project.tlib_forge_version}")
