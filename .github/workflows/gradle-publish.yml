@@ -150,7 +150,7 @@ jobs:
           game-versions: "${{env.MINECRAFT_VERSION}}"
           java: "${{env.JAVA_VERSION}}"
           files: |
-            build/fabric/build/libs/!(*-@(sources)).jar
+            build/fabric/build/libs/!(*-@(sources|dev)).jar
             build/fabric/build/libs/*-@(sources).jar
             build/common/build/libs/!(*-@(sources)).jar
             build/common/build/libs/*-@(sources).jar
@@ -198,7 +198,7 @@ jobs:
           game-versions: "${{env.MINECRAFT_VERSION}}"
           java: "${{env.JAVA_VERSION}}"
           files: |
-            build/fabric/build/libs/!(*-@(sources)).jar
+            build/fabric/build/libs/!(*-@(sources|dev)).jar
             build/fabric/build/libs/*-@(sources).jar
             build/common/build/libs/!(*-@(sources)).jar
             build/common/build/libs/*-@(sources).jar
