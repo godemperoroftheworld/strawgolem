@@ -52,7 +52,7 @@ loom {
     // Forge Mixin
     if (env.isForge) {
         forge {
-            mixinConfigs("mixins.haybale.json", "mixins.haybale.forge.json")
+            mixinConfigs("mixins.${mod.id}.json", "mixins.${mod.id}.forge.json")
         }
     }
 
@@ -65,50 +65,51 @@ loom {
 base { archivesName.set(env.archivesBaseName) }
 
 /** Dependencies **/
-class API(
+class Relation(
     val group: String,
     val module: String,
     val version: VersionRange,
     val exclude: String = "",
     val loader: String = "",
-    val modID: String = "",
-    val optional: Boolean = false
+    val modID: String = module,
+    val optional: Boolean = false,
+    val modrinth: String = modID,
+    val curseforge: String = modID,
 ) {
 
-    val modIDDefaulted: String
-        get() = modID.ifBlank { module }
-
     fun fabric(): String {
-        return "\"${modIDDefaulted}\": \">=${version.min}\""
+        return "\"${modID}\": \">=${version.min}\""
     }
 
     fun forge(): String {
         return "[[dependencies.${mod.id}]]\n" +
-        "modId=\"${modIDDefaulted}\"\n" +
-        "mandatory=${!optional}\n" +
-        "versionRange=\"[${version.min},)\"\n" +
-        "ordering=\"NONE\"\n" +
-        "side=\"BOTH\"\n"
+                "modId=\"${modID}\"\n" +
+                "mandatory=${!optional}\n" +
+                "versionRange=\"[${version.min},)\"\n" +
+                "ordering=\"NONE\"\n" +
+                "side=\"BOTH\"\n"
     }
 }
-
-val apis: Array<API> = arrayOf(
-    API("com.terraformersmc",
+val relations: Array<Relation> = arrayOf(
+    Relation("com.terraformersmc",
         "modmenu",
         versionProperty("deps.api.mod_menu"),
         "",
         "fabric",
+        modrinth = "mOgUt4GM",
         optional = true),
-    API("me.shedaniel.cloth",
+    Relation("me.shedaniel.cloth",
         "cloth-config-${env.loader}",
         versionProperty("deps.api.cloth_config"),
         optional = true,
-        modID = if (env.isFabric) "cloth-config" else "cloth_config"),
-    API("software.bernie.geckolib", "geckolib-${env.loader}-${env.mcVersion.min}", versionProperty("deps.api.geckolib"), optional = false, modID = "geckolib"),
-    API("curse.maven", "jade-324717", versionProperty("deps.api.jade"), optional = true),
-    API("curse.maven", "animal-feeding-trough-445838", versionProperty("deps.api.animal_feeding_trough"), optional = true),
-    API("curse.maven", "architectury-api-419699", versionProperty("deps.api.architectury_api"), optional = true),
-    API("curse.maven", "haybale-919468", versionProperty("deps.api.haybale"), modID = "haybale", optional = false)
+        modID = if (env.isFabric) "cloth-config" else "cloth_config",
+        modrinth = "9s6osm5g",
+        curseforge = "cloth-config"),
+    Relation("software.bernie.geckolib", "geckolib-${env.loader}-${env.mcVersion.min}", versionProperty("deps.api.geckolib"), optional = false, modID = "geckolib"),
+    Relation("curse.maven", "jade-324717", versionProperty("deps.api.jade"), optional = true),
+    Relation("curse.maven", "animal-feeding-trough-445838", versionProperty("deps.api.animal_feeding_trough"), optional = true),
+    Relation("curse.maven", "architectury-api-419699", versionProperty("deps.api.architectury_api"), optional = true),
+    Relation("curse.maven", "haybale-919468", versionProperty("deps.api.haybale"), modID = "haybale", optional = false)
 )
 
 dependencies {
@@ -134,7 +135,7 @@ dependencies {
     // Decompiler
     vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.1")
     // APIs
-    apis.forEach {
+    relations.forEach {
         if (it.loader.isBlank() || it.loader == env.loader) {
             val string = "${it.group}:${it.module}:${it.version.min}"
             if (it.optional) {
@@ -172,9 +173,9 @@ abstract class ProcessResourcesExtension : ProcessResources() {
     val autoPluralize = arrayListOf(
         "/data/minecraft/tags/block",
         "/data/minecraft/tags/item",
-        "/data/haybale/loot_table",
-        "/data/haybale/recipe",
-        "/data/haybale/tags/item",
+        "/data/${mod.id}/loot_table",
+        "/data/${mod.id}/recipe",
+        "/data/${mod.id}/tags/item",
     )
     override fun copy() {
         super.copy()
@@ -220,14 +221,14 @@ tasks.processResources {
     }
 
     // Dependencies
-    val apisForLoader = apis.filter { it.loader.isBlank() || env.loader == it.loader }
+    val apisForLoader = relations.filter { it.loader.isBlank() || env.loader == it.loader }
     val required = apisForLoader.filter { !it.optional }
     val optional = apisForLoader.filter { it.optional }
-    fun fabricDependencies(apis: List<API>): String {
+    fun fabricDependencies(apis: List<Relation>): String {
         var result = apis.joinToString(separator = ",\n    ") { it.fabric() }
         return "{\n    $result\n  }"
     }
-    fun forgeDependencies(apis: List<API>): String {
+    fun forgeDependencies(apis: List<Relation>): String {
         return apis.joinToString(separator = "\n") { it.forge() }
     }
 
@@ -279,17 +280,11 @@ publishMods {
         // Get one here: https://modrinth.com/settings/pats, enable read, write, and create Versions ONLY!
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         minecraftVersions.addAll(modPublish.mcTargets)
-        apis.forEach{ src ->
+        relations.forEach{ src ->
             if (src.optional) {
-                optional {
-                    slug = src.modID
-                    version = src.version.min
-                }
+                optional(src.modrinth)
             } else {
-                requires {
-                    slug = src.modID
-                    version = src.version.min
-                }
+                requires(src.modrinth)
             }
         }
     }
@@ -300,11 +295,11 @@ publishMods {
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
         minecraftVersions.addAll(modPublish.mcTargets)
 
-        apis.forEach { src ->
+        relations.forEach { src ->
             if (src.optional) {
-                optional(src.modID)
+                optional(src.curseforge)
             } else {
-                requires(src.modID)
+                requires(src.curseforge)
             }
         }
 

@@ -53,7 +53,7 @@ stonecutter {
     create(rootProject)
 }
 
-rootProject.name = "haybale"
+rootProject.name = "Straw Golem"
 
 
 
