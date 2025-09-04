@@ -1,0 +1,16 @@
+modLoader="javafml"
+loaderVersion="${forgelike_loader_ver}"
+license="${license}"
+issueTrackerURL="${issue_tracker}"
+
+[[mods]]
+modId="${id}"
+version="${version}"
+displayName="${name}"
+logoFile="${icon}"
+authors="${authors}"
+description='''
+${description}
+'''
+
+${depends}

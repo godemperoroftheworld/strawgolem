@@ -1,0 +1,22 @@
+#[[accessTransformers]]
+#file="META-INF/accesstransformer.cfg"
+# The coremods config file path is not configurable and is always loaded from META-INF/coremods.json
+
+modLoader="javafml"
+loaderVersion="${forgelike_loader_ver}"
+license="${license}"
+issueTrackerURL="${issue_tracker}"
+
+[[mods]]
+modId="${id}"
+version="${version}"
+displayName="${name}"
+logoFile="${icon}"
+authors="${authors}"
+description='''
+${description}
+'''
+
+${depends}
+
+
