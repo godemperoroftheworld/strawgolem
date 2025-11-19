@@ -123,7 +123,7 @@ val relations: Array<Relation> = arrayOf(
         versionProperty("deps.api.animal_feeding_trough"),
         versionProperty("deps.api.animal_feeding_trough"),
         optional = true,
-        loader = if (env.atLeast("1.19")) "" else "fabric",
+        loader = if (env.atLeast("1.20")) "" else "fabric",
         modrinth = "bRFWnJ87"),
     Relation("curse.maven",
         "architectury-api-419699",

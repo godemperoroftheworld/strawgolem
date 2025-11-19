@@ -1,4 +1,5 @@
-package com.t2pellet.strawgolem.fabric.mixin;
+//? if fabric {
+/*package com.t2pellet.strawgolem.fabric.mixin;
 
 import com.t2pellet.strawgolem.Constants;
 import com.t2pellet.strawgolem.common.util.crop.CropUtil;
@@ -33,3 +34,4 @@ public class GrowthMixin {
         }
     }
 }
+*///?}

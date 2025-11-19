@@ -1,4 +1,5 @@
-package com.t2pellet.strawgolem.fabric.events;
+//? if fabric {
+/*package com.t2pellet.strawgolem.fabric.events;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
@@ -16,3 +17,4 @@ public interface CropGrowthCallback {
 
     void grow(ServerLevel world, BlockPos pos);
 }
+*///?}
