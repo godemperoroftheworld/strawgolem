@@ -1,5 +1,5 @@
 //? if forge {
-/*package com.t2pellet.strawgolem.forge;
+package com.t2pellet.strawgolem.forge;
 
 import com.t2pellet.haybale.HaybaleMod;
 import com.t2pellet.haybale.client.HaybaleModClient;
@@ -10,7 +10,7 @@ import com.t2pellet.strawgolem.client.StrawgolemClient;
 import com.t2pellet.strawgolem.common.events.ContainerClickHandler;
 import com.t2pellet.strawgolem.common.events.CropGrowthHandler;
 import com.t2pellet.strawgolem.common.util.container.ContainerUtil;
-import com.t2pellet.strawgolem.fabric.events.CropGrowthEvent;
+import com.t2pellet.strawgolem.forge.events.CropGrowthEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -47,4 +47,4 @@ public class StrawgolemForge extends HaybaleForgeMod {
         });
     }
 }
-*///?}
+//?}
