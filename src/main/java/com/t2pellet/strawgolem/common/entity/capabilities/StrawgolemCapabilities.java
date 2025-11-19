@@ -1,22 +1,22 @@
 package com.t2pellet.strawgolem.common.entity.capabilities;
 
+import com.t2pellet.haybale.common.capability.api.registry.IModCapabilities;
 import com.t2pellet.strawgolem.common.entity.capabilities.decay.Decay;
 import com.t2pellet.strawgolem.common.entity.capabilities.deliverer.Deliverer;
 import com.t2pellet.strawgolem.common.entity.capabilities.harvester.Harvester;
 import com.t2pellet.strawgolem.common.entity.capabilities.held_item.HeldItem;
 import com.t2pellet.strawgolem.common.entity.capabilities.tether.Tether;
-import com.t2pellet.tlib.entity.capability.api.registry.IModCapabilities;
 
 public class StrawgolemCapabilities implements IModCapabilities {
 
     @ICapability(Decay.class)
-    public static final TLibCapability<Decay> decay = new TLibCapability<>(Decay::getInstance);
+    public static final HaybaleCapability<Decay> decay = new HaybaleCapability<>(Decay::getInstance);
     @ICapability(HeldItem.class)
-    public static final TLibCapability<HeldItem> heldItem = new TLibCapability<>(HeldItem::getInstance);
+    public static final HaybaleCapability<HeldItem> heldItem = new HaybaleCapability<>(HeldItem::getInstance);
     @ICapability(Harvester.class)
-    public static final TLibCapability<Harvester> harvester = new TLibCapability<>(Harvester::getInstance);
+    public static final HaybaleCapability<Harvester> harvester = new HaybaleCapability<>(Harvester::getInstance);
     @ICapability(Deliverer.class)
-    public static final TLibCapability<Deliverer> deliverer = new TLibCapability<>(Deliverer::getInstance);
+    public static final HaybaleCapability<Deliverer> deliverer = new HaybaleCapability<>(Deliverer::getInstance);
     @ICapability(Tether.class)
-    public static final TLibCapability<Tether> tether = new TLibCapability<>(Tether::getInstance);
+    public static final HaybaleCapability<Tether> tether = new HaybaleCapability<>(Tether::getInstance);
 }

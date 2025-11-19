@@ -1,19 +1,19 @@
 package com.t2pellet.strawgolem;
 
+import com.t2pellet.haybale.HaybaleMod;
+import com.t2pellet.haybale.common.capability.api.registry.IModCapabilities;
+import com.t2pellet.haybale.common.config.api.Config;
+import com.t2pellet.haybale.common.registry.api.RegistryClass;
 import com.t2pellet.strawgolem.common.entity.capabilities.StrawgolemCapabilities;
 import com.t2pellet.strawgolem.common.registry.StrawgolemEntities;
 import com.t2pellet.strawgolem.common.registry.StrawgolemItems;
 import com.t2pellet.strawgolem.common.registry.StrawgolemParticles;
 import com.t2pellet.strawgolem.common.registry.StrawgolemSounds;
-import com.t2pellet.tlib.TLibMod;
-import com.t2pellet.tlib.config.api.Config;
-import com.t2pellet.tlib.entity.capability.api.registry.IModCapabilities;
-import com.t2pellet.tlib.registry.api.RegistryClass;
 
 import java.io.IOException;
 
 
-public class StrawgolemCommon extends TLibMod {
+public class StrawgolemCommon extends HaybaleMod {
     public static final StrawgolemCommon INSTANCE = new StrawgolemCommon();
 
     @Override

@@ -1,8 +1,8 @@
 package com.t2pellet.strawgolem.common.entity.capabilities.tether;
 
+import com.t2pellet.haybale.common.capability.api.AbstractCapability;
+import com.t2pellet.haybale.common.capability.api.ICapabilityHaver;
 import com.t2pellet.strawgolem.StrawgolemConfig;
-import com.t2pellet.tlib.entity.capability.api.AbstractCapability;
-import com.t2pellet.tlib.entity.capability.api.ICapabilityHaver;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;

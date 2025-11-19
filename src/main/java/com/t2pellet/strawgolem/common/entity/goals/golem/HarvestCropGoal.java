@@ -1,11 +1,11 @@
 package com.t2pellet.strawgolem.common.entity.goals.golem;
 
+import com.t2pellet.haybale.Services;
 import com.t2pellet.strawgolem.StrawgolemConfig;
 import com.t2pellet.strawgolem.common.entity.StrawGolem;
 import com.t2pellet.strawgolem.common.entity.capabilities.harvester.Harvester;
 import com.t2pellet.strawgolem.common.registry.StrawgolemSounds;
 import com.t2pellet.strawgolem.common.util.crop.CropUtil;
-import com.t2pellet.tlib.Services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;

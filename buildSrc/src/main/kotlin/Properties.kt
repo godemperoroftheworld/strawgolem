@@ -8,6 +8,7 @@ class Env(private val project: Project) {
     val archivesBaseName = project.property("archives_base_name").toString()
 
     val mcVersion = project.versionProperty("deps.core.mc.version_range")
+    val baseVersion = project.property("deps.core.mc.base_version").toString()
 
     val loader = project.property("loom.platform").toString()
     val isFabric = loader == "fabric"

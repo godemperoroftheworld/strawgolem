@@ -6,8 +6,7 @@ import com.t2pellet.strawgolem.common.compat.api.HarvestableBlock;
 import com.t2pellet.strawgolem.common.compat.api.HarvestableState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.LevelAccessor;
@@ -25,11 +24,12 @@ import java.util.Set;
 
 public class CropUtil {
 
-    private static final TagKey<Block> HARVESTABLE_CROPS = TagKey.create(Registries.BLOCK, new ResourceLocation(Constants.MOD_ID, "crops"));
+    private static final TagKey<Block> HARVESTABLE_CROPS = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(Constants.MOD_ID, "crops"));
     private static final Set<ResourceLocation> BLACKLISTED_CROPS = new HashSet<>();
     private static final Set<ResourceLocation> WHITELISTED_CROPS = new HashSet<>();
 
-    private CropUtil() {}
+    private CropUtil() {
+    }
 
     static {
         List<String> blacklistKeys = StrawgolemConfig.Harvesting.blacklist.get();
@@ -114,12 +114,12 @@ public class CropUtil {
     }
 
     private static boolean isBlacklisted(Block block) {
-        ResourceLocation location = BuiltInRegistries.BLOCK.getKey(block);
+        ResourceLocation location = Registry.BLOCK.getKey(block);
         return BLACKLISTED_CROPS.contains(location);
     }
 
     private static boolean isWhitelisted(Block block) {
-        ResourceLocation location = BuiltInRegistries.BLOCK.getKey(block);
+        ResourceLocation location = Registry.BLOCK.getKey(block);
         return WHITELISTED_CROPS.contains(location);
     }
 

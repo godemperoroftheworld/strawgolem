@@ -1,7 +1,7 @@
 package com.t2pellet.strawgolem.common.entity.capabilities.tether;
 
-import com.t2pellet.tlib.entity.capability.api.Capability;
-import com.t2pellet.tlib.entity.capability.api.ICapabilityHaver;
+import com.t2pellet.haybale.common.capability.api.Capability;
+import com.t2pellet.haybale.common.capability.api.ICapabilityHaver;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 

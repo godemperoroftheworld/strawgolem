@@ -16,11 +16,11 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.t2pellet.strawgolem.fabric.HaybaleFabric"
+      "com.t2pellet.strawgolem.fabric.StrawgolemFabric"
     ],
     "client": [
-      "com.t2pellet.strawgolem.fabric.HaybaleFabric"
-    ],
+      "com.t2pellet.strawgolem.fabric.StrawgolemFabric"
+    ]
   },
   "mixins": [
     "mixins.strawgolem.json",

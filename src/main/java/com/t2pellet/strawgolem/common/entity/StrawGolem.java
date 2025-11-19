@@ -1,5 +1,8 @@
 package com.t2pellet.strawgolem.common.entity;
 
+import com.t2pellet.haybale.Services;
+import com.t2pellet.haybale.common.capability.api.CapabilityManager;
+import com.t2pellet.haybale.common.capability.api.ICapabilityHaver;
 import com.t2pellet.strawgolem.StrawgolemConfig;
 import com.t2pellet.strawgolem.common.entity.animations.StrawgolemArmsController;
 import com.t2pellet.strawgolem.common.entity.animations.StrawgolemHarvestController;
@@ -14,13 +17,9 @@ import com.t2pellet.strawgolem.common.entity.goals.golem.*;
 import com.t2pellet.strawgolem.common.registry.StrawgolemItems;
 import com.t2pellet.strawgolem.common.registry.StrawgolemParticles;
 import com.t2pellet.strawgolem.common.registry.StrawgolemSounds;
-import com.t2pellet.strawgolem.entity.goals.golem.*;
-import com.t2pellet.tlib.Services;
-import com.t2pellet.tlib.entity.capability.api.CapabilityManager;
-import com.t2pellet.tlib.entity.capability.api.ICapabilityHaver;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -60,8 +59,8 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 // TODO : Fix bug - not always walking fully to destination
 public class StrawGolem extends AbstractGolem implements IAnimatable, ICapabilityHaver {
 
-    public static final Item REPAIR_ITEM = BuiltInRegistries.ITEM.get(new ResourceLocation(StrawgolemConfig.Lifespan.repairItem.get()));
-    public static final Item BARREL_ITEM = BuiltInRegistries.ITEM.get(new ResourceLocation(StrawgolemConfig.Lifespan.barrelItem.get()));
+    public static final Item REPAIR_ITEM = Registry.ITEM.get(new ResourceLocation(StrawgolemConfig.Lifespan.repairItem.get()));
+    public static final Item BARREL_ITEM = Registry.ITEM.get(new ResourceLocation(StrawgolemConfig.Lifespan.barrelItem.get()));
     private static final double WALK_DISTANCE = 0.00000001D;
     private static final double RUN_DISTANCE = 0.003D;
 

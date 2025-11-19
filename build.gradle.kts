@@ -16,8 +16,12 @@ repositories {
     maven("https://maven.shedaniel.me/")
     maven( "https://maven.terraformersmc.com/releases/")
     maven("https://maven.nucleoid.xyz/") { name = "Nucleoid" }
-    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") { name = "Geckolib" }
+    maven("https://api.modrinth.com/maven") { name = "Modrinth" }
     maven("https://cursemaven.com") { name = "CurseMaven" }
+    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") {
+        name = "GeckoLib"
+    }
+
 }
 
 val env = Env(project)
@@ -69,6 +73,7 @@ class Relation(
     val group: String,
     val module: String,
     val version: VersionRange,
+    val friendlyVersion: VersionRange,
     val exclude: String = "",
     val loader: String = "",
     val modID: String = module,
@@ -78,7 +83,7 @@ class Relation(
 ) {
 
     fun fabric(): String {
-        return "\"${modID}\": \">=${version.min}\""
+        return "\"${modID}\": \">=${friendlyVersion.min}\""
     }
 
     fun forge(): String {
@@ -94,6 +99,7 @@ val relations: Array<Relation> = arrayOf(
     Relation("com.terraformersmc",
         "modmenu",
         versionProperty("deps.api.mod_menu"),
+        versionProperty("deps.api.mod_menu"),
         "",
         "fabric",
         modrinth = "mOgUt4GM",
@@ -101,15 +107,44 @@ val relations: Array<Relation> = arrayOf(
     Relation("me.shedaniel.cloth",
         "cloth-config-${env.loader}",
         versionProperty("deps.api.cloth_config"),
+        versionProperty("deps.api.cloth_config"),
         optional = true,
         modID = if (env.isFabric) "cloth-config" else "cloth_config",
         modrinth = "9s6osm5g",
         curseforge = "cloth-config"),
-    Relation("software.bernie.geckolib", "geckolib-${env.loader}-${env.mcVersion.min}", versionProperty("deps.api.geckolib"), optional = false, modID = "geckolib"),
-    Relation("curse.maven", "jade-324717", versionProperty("deps.api.jade"), optional = true),
-    Relation("curse.maven", "animal-feeding-trough-445838", versionProperty("deps.api.animal_feeding_trough"), optional = true),
-    Relation("curse.maven", "architectury-api-419699", versionProperty("deps.api.architectury_api"), optional = true),
-    Relation("curse.maven", "haybale-919468", versionProperty("deps.api.haybale"), modID = "haybale", optional = false)
+    Relation("curse.maven",
+        "jade-324717",
+        versionProperty("deps.api.jade"),
+        versionProperty("deps.api.jade"),
+        optional = true,
+        modrinth = "nvQzSEkH"),
+    Relation("curse.maven",
+        "animal-feeding-trough-445838",
+        versionProperty("deps.api.animal_feeding_trough"),
+        versionProperty("deps.api.animal_feeding_trough"),
+        optional = true,
+        loader = if (env.atLeast("1.19")) "" else "fabric",
+        modrinth = "bRFWnJ87"),
+    Relation("curse.maven",
+        "architectury-api-419699",
+        versionProperty("deps.api.architectury_api"),
+        versionProperty("deps.api.architectury_api"),
+        optional = true,
+        modrinth = "lhGA9TYQ"),
+    Relation("maven.modrinth",
+        "haybale",
+        versionProperty("deps.api.haybale"),
+        versionProperty("deps.api.friendly.haybale"),
+        modID = "haybale",
+        optional = false,
+        modrinth = "ZrllRmem"),
+    Relation("software.bernie.geckolib",
+        "geckolib-${env.loader}-${env.baseVersion}",
+        versionProperty("deps.api.geckolib"),
+        versionProperty("deps.api.geckolib"),
+        optional = false,
+        modID = "geckolib3",
+        modrinth = "8BmcQJ2H"),
 )
 
 dependencies {
@@ -173,9 +208,10 @@ abstract class ProcessResourcesExtension : ProcessResources() {
     val autoPluralize = arrayListOf(
         "/data/minecraft/tags/block",
         "/data/minecraft/tags/item",
-        "/data/${mod.id}/loot_table",
-        "/data/${mod.id}/recipe",
-        "/data/${mod.id}/tags/item",
+        "/data/strawgolem/loot_table",
+        "/data/strawgolem/recipe",
+        "/data/strawgolem/tags/block",
+        "/data/strawgolem/tags/item",
     )
     override fun copy() {
         super.copy()

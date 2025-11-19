@@ -1,11 +1,11 @@
 package com.t2pellet.strawgolem.client;
 
+import com.t2pellet.haybale.client.HaybaleModClient;
+import com.t2pellet.haybale.common.registry.api.RegistryClass;
 import com.t2pellet.strawgolem.client.registry.StrawgolemEntityRenderers;
 import com.t2pellet.strawgolem.client.registry.StrawgolemParticleFactories;
-import com.t2pellet.tlib.client.TLibModClient;
-import com.t2pellet.tlib.registry.api.RegistryClass;
 
-public class StrawgolemClient extends TLibModClient {
+public class StrawgolemClient extends HaybaleModClient {
     public static final StrawgolemClient INSTANCE = new StrawgolemClient();
 
     @Override

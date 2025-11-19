@@ -2,7 +2,7 @@ package com.t2pellet.strawgolem.fabric.mixin;
 
 import com.t2pellet.strawgolem.Constants;
 import com.t2pellet.strawgolem.common.util.crop.CropUtil;
-import com.t2pellet.strawgolem.fabric.events.CropGrowthEvent;
+import com.t2pellet.strawgolem.fabric.events.CropGrowthCallback;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -28,7 +28,7 @@ public class GrowthMixin {
             if (CropUtil.isGrownCrop(level, pos)) {
                 Constants.LOG.debug("Crop grown in world: {}, at pos: {}", level.toString(), pos.toShortString());
                 BlockPos finalCropPos = cropPos;
-                level.getServer().execute(() -> CropGrowthEvent.onCropGrowth(level, finalCropPos, newState));
+                level.getServer().execute(() -> CropGrowthCallback.EVENT.invoker().grow(level, finalCropPos));
             }
         }
     }

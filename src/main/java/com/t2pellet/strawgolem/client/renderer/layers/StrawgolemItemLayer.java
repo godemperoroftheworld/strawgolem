@@ -1,7 +1,7 @@
 package com.t2pellet.strawgolem.client.renderer.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import com.t2pellet.strawgolem.client.model.StrawgolemGeoModel;
 import com.t2pellet.strawgolem.common.entity.StrawGolem;
 import com.t2pellet.strawgolem.common.entity.capabilities.held_item.HeldItem;
@@ -38,7 +38,7 @@ public class StrawgolemItemLayer extends GeoLayerRenderer<StrawGolem> {
         boolean holdAboveHead = golem.shouldHoldAboveHead();
         boolean isBlock = golem.isHoldingBlock();
         matrixStackIn.pushPose();
-        matrixStackIn.mulPose(Axis.XP.rotationDegrees(isBlock ? -180.0F : -90.0F));
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(isBlock ? -180.0F : -90.0F));
         matrixStackIn.translate(0, holdAboveHead ? isBlock ? -0.3F : 0.0F : -0.45F, holdAboveHead ? isBlock ? 0.0F : 0.1F : -0.15F);
         matrixStackIn.scale(0.5F, 0.5F, 0.5F);
         this.itemInHandRenderer.renderItem(golem, heldItem.get(), ItemTransforms.TransformType.NONE, false, matrixStackIn, bufferIn, packedLightIn);

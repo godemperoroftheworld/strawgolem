@@ -1,9 +1,9 @@
 package com.t2pellet.strawgolem.common.entity.capabilities.deliverer;
 
+import com.t2pellet.haybale.common.capability.api.AbstractCapability;
+import com.t2pellet.haybale.common.capability.api.ICapabilityHaver;
 import com.t2pellet.strawgolem.common.util.VisibilityUtil;
 import com.t2pellet.strawgolem.common.util.container.ContainerUtil;
-import com.t2pellet.tlib.entity.capability.api.AbstractCapability;
-import com.t2pellet.tlib.entity.capability.api.ICapabilityHaver;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
