@@ -17,8 +17,8 @@ import com.t2pellet.strawgolem.common.entity.goals.golem.*;
 import com.t2pellet.strawgolem.common.registry.StrawgolemItems;
 import com.t2pellet.strawgolem.common.registry.StrawgolemParticles;
 import com.t2pellet.strawgolem.common.registry.StrawgolemSounds;
+import com.t2pellet.strawgolem.common.util.VersionSafeRegistries;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -51,16 +51,30 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.StemGrownBlock;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib3.core.IAnimatable;
+//? if > 1.19.3 {
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.world.damagesource.DamageTypes;
+//?} else {
+/*import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
+*///?}
 
 // TODO : Fix bug - not always walking fully to destination
-public class StrawGolem extends AbstractGolem implements IAnimatable, ICapabilityHaver {
+public class StrawGolem extends AbstractGolem implements
+//? if < 1.19.3 {
+        /*IAnimatable,
+*///?} else
+        GeoEntity,
+        ICapabilityHaver {
 
-    public static final Item REPAIR_ITEM = Registry.ITEM.get(new ResourceLocation(StrawgolemConfig.Lifespan.repairItem.get()));
-    public static final Item BARREL_ITEM = Registry.ITEM.get(new ResourceLocation(StrawgolemConfig.Lifespan.barrelItem.get()));
+    public static final Item REPAIR_ITEM = VersionSafeRegistries.item().get(new ResourceLocation(StrawgolemConfig.Lifespan.repairItem.get()));
+    public static final Item BARREL_ITEM = VersionSafeRegistries.item().get(new ResourceLocation(StrawgolemConfig.Lifespan.barrelItem.get()));
+
     private static final double WALK_DISTANCE = 0.00000001D;
     private static final double RUN_DISTANCE = 0.003D;
 
@@ -88,7 +102,10 @@ public class StrawGolem extends AbstractGolem implements IAnimatable, ICapabilit
                 .add(Attributes.MAX_HEALTH, StrawgolemConfig.Lifespan.baseHealth.get());
     }
 
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    //? if < 1.19.3 {
+    /*private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    *///?} else
+    private final AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
 
     public StrawGolem(EntityType<? extends StrawGolem> type, Level level) {
         super(type, level);
@@ -175,7 +192,11 @@ public class StrawGolem extends AbstractGolem implements IAnimatable, ICapabilit
     @Override
     public void teleportTo(double x, double y, double z) {
         super.teleportTo(x, y, z);
-        getTether().update(new BlockPos(x, y, z));
+        //? if > 1.19.3 {
+        BlockPos newPos = BlockPos.containing(x, y, z);
+        //?} else
+        /*BlockPos newPos = new BlockPos(x, y, z);*/
+        getTether().update(newPos);
         getHarvester().clearHarvest();
         getHarvester().clearQueue();
         getHarvester().findHarvestables();
@@ -216,7 +237,7 @@ public class StrawGolem extends AbstractGolem implements IAnimatable, ICapabilit
                 playSound(SoundEvents.ARMOR_EQUIP_LEATHER);
             }
         } else if (hand == InteractionHand.MAIN_HAND && item.isEmpty() && player.isCrouching()) {
-            StrawGolemOrderer orderer = (StrawGolemOrderer) (Object) player;
+            StrawGolemOrderer orderer = (StrawGolemOrderer) player;
             if (orderer.getOrderedGolem().isPresent() && orderer.getOrderedGolem().get().getId() == getId()) {
                 player.displayClientMessage(Component.translatable("strawgolem.ordering.stop"), true);
                 orderer.setOrderedGolem(null);
@@ -232,7 +253,10 @@ public class StrawGolem extends AbstractGolem implements IAnimatable, ICapabilit
 
     @Override
     public boolean isDamageSourceBlocked(DamageSource source) {
-        if (source == DamageSource.SWEET_BERRY_BUSH) return true;
+        //? if < 1.19.3 {
+        /*if (source == DamageSource.SWEET_BERRY_BUSH) return true;
+        *///?} else
+        if (source.is(DamageTypes.SWEET_BERRY_BUSH)) return true;
         if (hasBarrel()) return true;
         return super.isDamageSourceBlocked(source);
     }
@@ -275,14 +299,25 @@ public class StrawGolem extends AbstractGolem implements IAnimatable, ICapabilit
     /* Animations */
 
     @Override
-    public void registerControllers(AnimationData data) {
+    //? if < 1.19.3 {
+    /*public void registerControllers(AnimationData data) {
         data.addAnimationController(new StrawgolemMovementController(this));
         data.addAnimationController(new StrawgolemArmsController(this));
         data.addAnimationController(new StrawgolemHarvestController(this));
     }
+    *///?} else {
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new StrawgolemMovementController(this));
+        data.add(new StrawgolemArmsController(this));
+        data.add(new StrawgolemHarvestController(this));
+    }
+    //?}
 
     @Override
-    public AnimationFactory getFactory() {
+    //? if < 1.19.3 {
+    /*public AnimationFactory getFactory() {
+    *///?} else
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
         return factory;
     }
 
@@ -451,5 +486,4 @@ public class StrawGolem extends AbstractGolem implements IAnimatable, ICapabilit
         double z = random.nextFloat() + pos.z - 0.5F;
         level.addParticle(ParticleTypes.HAPPY_VILLAGER, x, pos.y + 0.85F, z, movement.x, movement.y, movement.z);
     }
-
 }

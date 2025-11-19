@@ -6,14 +6,24 @@ import com.t2pellet.strawgolem.StrawgolemConfig;
 import com.t2pellet.strawgolem.common.entity.StrawGolem;
 import com.t2pellet.strawgolem.common.entity.capabilities.decay.DecayState;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
+//? if < 1.19.3 {
+/*import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.util.RenderUtils;
+*///?} else {
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
+import software.bernie.geckolib.util.RenderUtils;
+//?}
 
-public class StrawgolemGeoModel extends AnimatedGeoModel<StrawGolem> {
+//? if < 1.19.3 {
+/*public class StrawgolemGeoModel extends AnimatedGeoModel<StrawGolem> {
+*///?} else
+public class StrawgolemGeoModel extends GeoModel<StrawGolem> {
 
     private static final ResourceLocation modelResource = new ResourceLocation(Constants.MOD_ID, "geo/strawgolem.geo.json");
     private static final ResourceLocation animationResource = new ResourceLocation(Constants.MOD_ID, "animations/strawgolem.animation.json");
@@ -22,7 +32,6 @@ public class StrawgolemGeoModel extends AnimatedGeoModel<StrawGolem> {
     private static final ResourceLocation newTextureResource = new ResourceLocation(Constants.MOD_ID, "textures/straw_golem.png");
     private static final ResourceLocation oldTextureResource = new ResourceLocation(Constants.MOD_ID, "textures/straw_golem_old.png");
     private static final ResourceLocation dyingTextureResource = new ResourceLocation(Constants.MOD_ID, "textures/straw_golem_dying.png");
-
 
     @Override
     public ResourceLocation getModelResource(StrawGolem golem) {
@@ -54,23 +63,37 @@ public class StrawgolemGeoModel extends AnimatedGeoModel<StrawGolem> {
         return animationResource;
     }
 
-
-
     @Override
-    public void setCustomAnimations(StrawGolem animatable, int instanceId, AnimationEvent animationEvent) {
+    //? if >= 1.19.3 {
+    public void setCustomAnimations(StrawGolem animatable, long instanceId, AnimationState<StrawGolem> animationEvent) {
+    //?} else
+    /*public void setCustomAnimations(StrawGolem animatable, int instanceId, AnimationEvent animationEvent) {*/
         super.setCustomAnimations(animatable, instanceId, animationEvent);
-        IBone head = this.getAnimationProcessor().getBone("head");
+        var head = this.getAnimationProcessor().getBone("head");
 
-        EntityModelData extraData = (EntityModelData) animationEvent.getExtraDataOfType(EntityModelData.class).get(0);
+        //? if < 1.19.3 {
+        /*EntityModelData extraData = (EntityModelData) animationEvent.getExtraDataOfType(EntityModelData.class).get(0);
         if (head != null) {
             head.setRotationX(extraData.headPitch * (float) Math.PI / 180);
             head.setRotationY(extraData.netHeadYaw * (float) Math.PI / 180);
         }
+        *///?} else {
+        EntityModelData extraData = animationEvent.getData(DataTickets.ENTITY_MODEL_DATA);
+        if (head != null) {
+            head.setRotX(extraData.headPitch() * (float) Math.PI / 180);
+            head.setRotY(extraData.netHeadYaw() * (float) Math.PI / 180);
+        }
+        //?}
     }
 
     public void translateToHand(PoseStack poseStack) {
-        GeoBone arms = (GeoBone) getBone("arms");
-        GeoBone upper = (GeoBone) getBone("upper");
+        //? if < 1.19.3 {
+        /*var arms = (GeoBone) getBone("arms");
+        var upper = (GeoBone) getBone("upper");
+        *///?} else {
+        var arms = getBone("arms").orElseThrow();
+        var upper = getBone("upper").orElseThrow();
+        //?}
         RenderUtils.prepMatrixForBone(poseStack, upper);
         RenderUtils.translateAndRotateMatrixForBone(poseStack, upper);
         RenderUtils.prepMatrixForBone(poseStack, arms);

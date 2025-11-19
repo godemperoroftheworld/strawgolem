@@ -38,9 +38,10 @@ stonecutter {
         set("forge", env.isForge)
         set("neoforge", env.isNeo)
     }
+
     replacements.string {
-        direction = eval(current.version, "<=1.18.2")
-        replace("RegisterParticleProvidersEvent", "ParticleFactoryRegisterEvent")
+        direction = eval(current.version, ">=1.19.4")
+        replace("AnimationBuilder", "RawAnimation")
     }
 }
 

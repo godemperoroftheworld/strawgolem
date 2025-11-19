@@ -7,6 +7,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
+//? if > 1.19.3 {
+import com.t2pellet.haybale.common.utils.VersionHelper;
+//?}
 
 public class MunchOnGolemGoal extends Goal {
 
@@ -48,7 +51,11 @@ public class MunchOnGolemGoal extends Goal {
     public void stop() {
         if (this.target.isAlive() && this.animal.distanceToSqr(this.target) <= 1.0F) {
             this.animal.playSound(SoundEvents.HORSE_EAT, 1.0F, 1.0F);
-            this.target.hurt(DamageSource.mobAttack(animal), 0.5F);
+            //? if > 1.19.3 {
+            DamageSource source = VersionHelper.getLevel(this.animal).damageSources().mobAttack(this.animal);
+            //?} else
+            /*DamageSource source = DamageSource.mobAttack(animal);*/
+            this.target.hurt(source, 0.5F);
         }
         this.target = null;
     }

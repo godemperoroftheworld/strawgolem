@@ -1,5 +1,5 @@
 //? if forge {
-package com.t2pellet.strawgolem.forge;
+/*package com.t2pellet.strawgolem.forge;
 
 import com.t2pellet.haybale.HaybaleMod;
 import com.t2pellet.haybale.client.HaybaleModClient;
@@ -47,4 +47,4 @@ public class StrawgolemForge extends HaybaleForgeMod {
         });
     }
 }
-//?}
+*///?}
