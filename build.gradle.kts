@@ -74,7 +74,7 @@ class Relation(
     val group: String,
     val module: String,
     val version: VersionRange,
-    val friendlyVersion: VersionRange,
+    val friendlyVersion: VersionRange = version,
     val exclude: String = "",
     val loader: String = "",
     val modID: String = module,
@@ -91,8 +91,8 @@ class Relation(
         return "[[dependencies.${mod.id}]]\n" +
                 "modId=\"${modID}\"\n" +
                 "mandatory=${!optional}\n" +
-                "versionRange=\"[${version.min},)\"\n" +
-                "ordering=\"NONE\"\n" +
+                "versionRange=\"[${friendlyVersion.min},)\"\n" +
+                "ordering=\"${if (optional) "NONE" else "AFTER"}\"\n" +
                 "side=\"BOTH\"\n"
     }
 }
@@ -167,6 +167,10 @@ dependencies {
     include("org.ini4j:ini4j:0.5.4")
     if (env.isForge || env.isNeo) {
         "forgeRuntimeLibrary"("org.ini4j:ini4j:0.5.4")
+    }
+    if (env.isForge || env.isNeo) {
+        modImplementation("com.eliotlash.mclib:mclib:20")
+        "forgeRuntimeLibrary"("com.eliotlash.mclib:mclib:20")
     }
     // Decompiler
     vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.1")

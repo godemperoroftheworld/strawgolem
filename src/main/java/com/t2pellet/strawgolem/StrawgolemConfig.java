@@ -2,7 +2,9 @@ package com.t2pellet.strawgolem;
 
 import com.t2pellet.haybale.common.config.api.Config;
 import com.t2pellet.haybale.common.config.api.property.*;
+import com.t2pellet.haybale.common.utils.VersionHelper;
 import com.t2pellet.strawgolem.common.util.VersionSafeRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
 import java.io.IOException;

@@ -1,5 +1,6 @@
 package com.t2pellet.strawgolem.common.entity.goals;
 
+import com.t2pellet.haybale.common.utils.VersionHelper;
 import com.t2pellet.strawgolem.StrawgolemConfig;
 import com.t2pellet.strawgolem.common.entity.StrawGolem;
 import net.minecraft.sounds.SoundEvents;
@@ -7,9 +8,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
-//? if > 1.19.3 {
-import com.t2pellet.haybale.common.utils.VersionHelper;
-//?}
 
 public class MunchOnGolemGoal extends Goal {
 

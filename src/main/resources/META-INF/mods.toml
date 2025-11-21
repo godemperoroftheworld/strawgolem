@@ -2,6 +2,7 @@ modLoader="javafml"
 loaderVersion="${forgelike_loader_ver}"
 license="${license}"
 issueTrackerURL="${issue_tracker}"
+mixins=["mixins.strawgolem.json"]
 
 [[mods]]
 modId="${id}"
