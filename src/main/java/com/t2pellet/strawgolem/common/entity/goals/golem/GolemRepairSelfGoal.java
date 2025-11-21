@@ -1,5 +1,6 @@
 package com.t2pellet.strawgolem.common.entity.goals.golem;
 
+import com.t2pellet.haybale.common.utils.VersionHelper;
 import com.t2pellet.strawgolem.StrawgolemConfig;
 import com.t2pellet.strawgolem.common.entity.StrawGolem;
 import com.t2pellet.strawgolem.common.entity.capabilities.decay.DecayState;
@@ -28,7 +29,7 @@ public class GolemRepairSelfGoal extends MoveToBlockGoal {
     public GolemRepairSelfGoal(StrawGolem golem, int range) {
         super(golem, StrawgolemConfig.Behaviour.golemWalkSpeed.get(), range);
         this.golem = golem;
-        this.level = (ServerLevel) golem.level;
+        this.level = (ServerLevel) VersionHelper.getLevel(golem);
     }
 
     @Override

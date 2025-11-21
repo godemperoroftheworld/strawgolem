@@ -1,5 +1,6 @@
 package com.t2pellet.strawgolem.common.mixin;
 
+import com.t2pellet.haybale.common.utils.VersionHelper;
 import com.t2pellet.strawgolem.common.entity.StrawGolem;
 import com.t2pellet.strawgolem.common.entity.StrawGolemOrderer;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -30,7 +31,7 @@ public class PlayerMixin implements StrawGolemOrderer {
         Player player = (Player) (Object) this;
         int golemID = player.getEntityData().get(GOLEM_ID);
         if (golemID > 0) {
-            StrawGolem golem = (StrawGolem) player.level.getEntity(golemID);
+            StrawGolem golem = (StrawGolem) VersionHelper.getLevel(player).getEntity(golemID);
             return Optional.ofNullable(golem);
         }
         return Optional.empty();

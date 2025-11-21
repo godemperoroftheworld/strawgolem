@@ -2,12 +2,14 @@ package com.t2pellet.strawgolem.common.entity.capabilities.held_item;
 
 import com.t2pellet.haybale.common.capability.api.AbstractCapability;
 import com.t2pellet.haybale.common.capability.api.ICapabilityHaver;
+import com.t2pellet.haybale.common.utils.VersionHelper;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 class HeldItemImpl<E extends Entity & ICapabilityHaver> extends AbstractCapability<E> implements HeldItem {
 
@@ -38,8 +40,8 @@ class HeldItemImpl<E extends Entity & ICapabilityHaver> extends AbstractCapabili
     public void drop() {
         ItemStack heldItem = get();
         set(ItemStack.EMPTY);
-        ItemEntity itemEntity = new ItemEntity(entity.level, entity.getX(), entity.getY() + 1, entity.getZ(), heldItem);
-        entity.level.addFreshEntity(itemEntity);
+        ItemEntity itemEntity = new ItemEntity(getLevel(), entity.getX(), entity.getY() + 1, entity.getZ(), heldItem);
+        getLevel().addFreshEntity(itemEntity);
     }
 
     @Override
@@ -50,5 +52,9 @@ class HeldItemImpl<E extends Entity & ICapabilityHaver> extends AbstractCapabili
     @Override
     public void readTag(Tag tag) {
         container.fromTag((ListTag) tag);
+    }
+
+    private Level getLevel() {
+        return VersionHelper.getLevel(entity);
     }
 }

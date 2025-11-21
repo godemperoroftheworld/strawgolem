@@ -1,5 +1,6 @@
 package com.t2pellet.strawgolem.common.entity.goals.golem;
 
+import com.t2pellet.haybale.common.utils.VersionHelper;
 import com.t2pellet.strawgolem.StrawgolemConfig;
 import com.t2pellet.strawgolem.common.entity.StrawGolem;
 import com.t2pellet.strawgolem.common.registry.StrawgolemSounds;
@@ -20,7 +21,7 @@ public class DeliverCropGoal extends MoveToBlockGoal {
     public DeliverCropGoal(StrawGolem golem) {
         super(golem, StrawgolemConfig.Behaviour.golemWalkSpeed.get(), StrawgolemConfig.Harvesting.harvestRange.get());
         this.golem = golem;
-        this.level = (ServerLevel) golem.level;
+        this.level = (ServerLevel) VersionHelper.getLevel(golem);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class DeliverCropGoal extends MoveToBlockGoal {
     @Override
     protected boolean findNearestBlock() {
         BlockPos blockPos = golem.getDeliverer().getDeliverPos();
-        if (isValidTarget(mob.getLevel(), blockPos)) {
+        if (isValidTarget(VersionHelper.getLevel(mob), blockPos)) {
             this.blockPos = blockPos;
             return true;
         }

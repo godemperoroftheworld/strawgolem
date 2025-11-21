@@ -1,5 +1,6 @@
 package com.t2pellet.strawgolem.common.entity.goals.golem;
 
+import com.t2pellet.haybale.common.utils.VersionHelper;
 import com.t2pellet.strawgolem.common.entity.StrawGolem;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +14,7 @@ public class GolemBeShyGoal extends GolemFleeEntityGoal<Player> {
 
     @Override
     public boolean canUse() {
-        this.toAvoid = this.mob.level.getNearestPlayer(this.mob, this.maxDist);
+        this.toAvoid = VersionHelper.getLevel(this.mob).getNearestPlayer(this.mob, this.maxDist);
         if (this.toAvoid == null) {
             return false;
         } else if (isTempting()) {

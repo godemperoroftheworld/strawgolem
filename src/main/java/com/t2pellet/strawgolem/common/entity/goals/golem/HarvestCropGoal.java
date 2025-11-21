@@ -1,6 +1,7 @@
 package com.t2pellet.strawgolem.common.entity.goals.golem;
 
 import com.t2pellet.haybale.Services;
+import com.t2pellet.haybale.common.utils.VersionHelper;
 import com.t2pellet.strawgolem.StrawgolemConfig;
 import com.t2pellet.strawgolem.common.entity.StrawGolem;
 import com.t2pellet.strawgolem.common.entity.capabilities.harvester.Harvester;
@@ -44,7 +45,7 @@ public class HarvestCropGoal extends MoveToBlockGoal {
 
     @Override
     public boolean canContinueToUse() {
-        return !golem.getHeldItem().has() && this.isValidTarget(this.mob.level, this.blockPos);
+        return !golem.getHeldItem().has() && this.isValidTarget(VersionHelper.getLevel(mob), this.blockPos);
     }
 
     @Override

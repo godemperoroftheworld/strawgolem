@@ -1,5 +1,5 @@
 //? if forge {
-package com.t2pellet.strawgolem.forge.mixin;
+/*package com.t2pellet.strawgolem.forge.mixin;
 
 import com.t2pellet.strawgolem.Constants;
 import com.t2pellet.strawgolem.common.util.crop.CropUtil;
@@ -34,4 +34,4 @@ public class GrowthMixin {
         }
     }
 }
-//?}
+*///?}

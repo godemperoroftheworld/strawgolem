@@ -7,6 +7,6 @@ plugins {
     id("co.uzzu.dotenv.gradle") version "4.0.0"
 }
 
-stonecutter active "1.19.4-forge" /* You may have to edit this. Make sure it matches one of the versions present in settings.gradle.kts */
+stonecutter active "1.20.1-fabric" /* You may have to edit this. Make sure it matches one of the versions present in settings.gradle.kts */
 
 

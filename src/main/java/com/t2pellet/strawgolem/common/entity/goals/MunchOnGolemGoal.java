@@ -37,7 +37,7 @@ public class MunchOnGolemGoal extends Goal {
         } else {
             // Occurs every 1-3 minutes
             this.nextStartTick = reducedTickDelay(600 + this.animal.getRandom().nextInt(3200));
-            this.target = this.animal.level.getNearestEntity(StrawGolem.class, predicate, animal, animal.getX(), animal.getY(), animal.getZ(), animal.getBoundingBox().inflate(24.0D));
+            this.target = VersionHelper.getLevel(this.animal).getNearestEntity(StrawGolem.class, predicate, animal, animal.getX(), animal.getY(), animal.getZ(), animal.getBoundingBox().inflate(24.0D));
             return this.target != null;
         }
     }

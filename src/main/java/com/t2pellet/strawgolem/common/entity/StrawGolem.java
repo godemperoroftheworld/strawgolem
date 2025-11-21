@@ -3,6 +3,7 @@ package com.t2pellet.strawgolem.common.entity;
 import com.t2pellet.haybale.Services;
 import com.t2pellet.haybale.common.capability.api.CapabilityManager;
 import com.t2pellet.haybale.common.capability.api.ICapabilityHaver;
+import com.t2pellet.haybale.common.utils.VersionHelper;
 import com.t2pellet.strawgolem.StrawgolemConfig;
 import com.t2pellet.strawgolem.common.entity.animations.StrawgolemArmsController;
 import com.t2pellet.strawgolem.common.entity.animations.StrawgolemHarvestController;
@@ -157,12 +158,10 @@ public class StrawGolem extends AbstractGolem implements
     @Override
     public void baseTick() {
         super.baseTick();
-        if (level.isClientSide) baseClientTick();
+        if (getLevel().isClientSide) baseClientTick();
         else baseServerTick();
         baseCommonTick();
     }
-
-
 
     private void baseClientTick() {
     }
@@ -352,7 +351,7 @@ public class StrawGolem extends AbstractGolem implements
     }
 
     public boolean isInCold() {
-        return level.getBiome(blockPosition()).value().getBaseTemperature() < 0.15F;
+        return getLevel().getBiome(blockPosition()).value().getBaseTemperature() < 0.15F;
     }
 
     public boolean isScared() {
@@ -476,7 +475,7 @@ public class StrawGolem extends AbstractGolem implements
     private void spawnFlyParticle() {
         Vec3 pos = position();
         Vec3 movement = getDeltaMovement();
-        level.addParticle(StrawgolemParticles.FLY_PARTICLE.get(), pos.x, pos.y + 0.15F, pos.z, movement.x, movement.y + 0.15F, movement.z);
+        getLevel().addParticle(StrawgolemParticles.FLY_PARTICLE.get(), pos.x, pos.y + 0.15F, pos.z, movement.x, movement.y + 0.15F, movement.z);
     }
 
     private void spawnHappyParticle() {
@@ -484,6 +483,10 @@ public class StrawGolem extends AbstractGolem implements
         Vec3 movement = getDeltaMovement();
         double x = random.nextFloat() + pos.x - 0.5F;
         double z = random.nextFloat() + pos.z - 0.5F;
-        level.addParticle(ParticleTypes.HAPPY_VILLAGER, x, pos.y + 0.85F, z, movement.x, movement.y, movement.z);
+        getLevel().addParticle(ParticleTypes.HAPPY_VILLAGER, x, pos.y + 0.85F, z, movement.x, movement.y, movement.z);
+    }
+
+    private Level getLevel() {
+        return VersionHelper.getLevel(this);
     }
 }
