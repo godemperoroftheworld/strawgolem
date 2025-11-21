@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -63,7 +64,7 @@ public class CarvedPumpkinMixin {
             level.addFreshEntity(strawGolem);
 
             // Summon trigger & recipe unlock
-            Optional<? extends Recipe<?>> recipe = level.getServer().getRecipeManager().byKey(new ResourceLocation(Constants.MOD_ID, "straw_hat"));
+            var recipe = level.getServer().getRecipeManager().byKey(new ResourceLocation(Constants.MOD_ID, "straw_hat"));
             for(ServerPlayer serverplayer : level.getEntitiesOfClass(ServerPlayer.class, strawGolem.getBoundingBox().inflate(5.0D))) {
                 CriteriaTriggers.SUMMONED_ENTITY.trigger(serverplayer, strawGolem);
                 recipe.ifPresent(r -> serverplayer.getRecipeBook().add(r));
@@ -77,6 +78,7 @@ public class CarvedPumpkinMixin {
         }
     }
 
+    @Unique
     private BlockPattern getOrCreateStrawGolemBase() {
         if (strawGolemBase == null) {
             strawGolemBase = BlockPatternBuilder.start().aisle(" ", "#").where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.HAY_BLOCK))).build();
@@ -84,6 +86,7 @@ public class CarvedPumpkinMixin {
         return strawGolemBase;
     }
 
+    @Unique
     private BlockPattern getOrCreateStrawGolemFull() {
         if (strawGolemFull == null) {
             strawGolemFull = BlockPatternBuilder.start().aisle("^", "#").where('^', BlockInWorld.hasState(PUMPKINS_PREDICATE)).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.HAY_BLOCK))).build();

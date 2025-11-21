@@ -14,9 +14,9 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.AttachedStemBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.StemGrownBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -42,52 +42,36 @@ public class CropUtil {
         }
     }
 
-    public static boolean isCrop(LevelAccessor level, BlockPos pos) {
-        return pos != null && isCrop(level.getBlockState(pos));
-    }
-
     public static boolean isGrownCrop(LevelAccessor level, BlockPos pos) {
         if (pos == null) return false;
 
-        BlockState state = level.getBlockState(pos);
-        if (!isCrop(state)) return false;
+        if (!isCropOrGourd(level, pos)) return false;
 
+        BlockState state = level.getBlockState(pos);
         if (state.getBlock() instanceof CropBlock cropBlock) {
             return cropBlock.isMaxAge(state);
         } else if (state.getBlock() instanceof HarvestableBlock cropBlock) {
             return cropBlock.isMaxAge(state);
         } else if (state instanceof HarvestableState cropBlock) {
             return cropBlock.isMaxAge();
-        } else if (state.getBlock() instanceof StemGrownBlock) {
-            for (Direction direction : Direction.values()) {
-                if (isValidStem(level, pos.offset(direction.getNormal()), direction.getOpposite())) {
-                    return true;
-                }
-            }
-            return false;
+        } else if (state.hasProperty(BlockStateProperties.AGE_1)) {
+            return state.getValue(BlockStateProperties.AGE_1) == BlockStateProperties.MAX_AGE_1;
+        } else if (state.hasProperty(BlockStateProperties.AGE_2)) {
+            return state.getValue(BlockStateProperties.AGE_2) == BlockStateProperties.MAX_AGE_2;
+        } else if (state.hasProperty(BlockStateProperties.AGE_3)) {
+            return state.getValue(BlockStateProperties.AGE_3) == BlockStateProperties.MAX_AGE_3;
+        } else if (state.hasProperty(BlockStateProperties.AGE_4)) {
+            return state.getValue(BlockStateProperties.AGE_4) == BlockStateProperties.MAX_AGE_4;
+        } else if (state.hasProperty(BlockStateProperties.AGE_5)) {
+            return state.getValue(BlockStateProperties.AGE_5) == BlockStateProperties.MAX_AGE_5;
+        } else if (state.hasProperty(BlockStateProperties.AGE_7)) {
+            return state.getValue(BlockStateProperties.AGE_7) == BlockStateProperties.MAX_AGE_7;
+        } else if (state.hasProperty(BlockStateProperties.AGE_15)) {
+            return state.getValue(BlockStateProperties.AGE_15) == BlockStateProperties.MAX_AGE_15;
+        } else if (state.hasProperty(BlockStateProperties.AGE_25)) {
+            return state.getValue(BlockStateProperties.AGE_25) == BlockStateProperties.MAX_AGE_25;
         }
-
-        boolean whitelistedCrop = StrawgolemConfig.Harvesting.enableWhitelist.get() && isWhitelisted(state.getBlock());
-        if (state.is(HARVESTABLE_CROPS) || whitelistedCrop) {
-            if (state.hasProperty(BlockStateProperties.AGE_1)) {
-                return state.getValue(BlockStateProperties.AGE_1).intValue() == BlockStateProperties.MAX_AGE_1;
-            } else if (state.hasProperty(BlockStateProperties.AGE_2)) {
-                return state.getValue(BlockStateProperties.AGE_2).intValue() == BlockStateProperties.MAX_AGE_2;
-            } else if (state.hasProperty(BlockStateProperties.AGE_3)) {
-                return state.getValue(BlockStateProperties.AGE_3).intValue() == BlockStateProperties.MAX_AGE_3;
-            } else if (state.hasProperty(BlockStateProperties.AGE_4)) {
-                return state.getValue(BlockStateProperties.AGE_4).intValue() == BlockStateProperties.MAX_AGE_4;
-            } else if (state.hasProperty(BlockStateProperties.AGE_5)) {
-                return state.getValue(BlockStateProperties.AGE_5).intValue() == BlockStateProperties.MAX_AGE_5;
-            } else if (state.hasProperty(BlockStateProperties.AGE_7)) {
-                return state.getValue(BlockStateProperties.AGE_7).intValue() == BlockStateProperties.MAX_AGE_7;
-            } else if (state.hasProperty(BlockStateProperties.AGE_15)) {
-                return state.getValue(BlockStateProperties.AGE_15).intValue() == BlockStateProperties.MAX_AGE_15;
-            } else if (state.hasProperty(BlockStateProperties.AGE_25)) {
-                return state.getValue(BlockStateProperties.AGE_25).intValue() == BlockStateProperties.MAX_AGE_25;
-            }
-        }
-        return false;
+        return true;
     }
 
     private static boolean isValidStem(LevelReader level, BlockPos pos, Direction direction) {
@@ -100,17 +84,37 @@ public class CropUtil {
     }
 
 
-    // TODO : Should probably check here that it has one of the age properties if its from the tag system
-    public static boolean isCrop(BlockState state) {
-        boolean isCrop = state.getBlock() instanceof CropBlock
-                || state.getBlock() instanceof HarvestableBlock
-                || state instanceof HarvestableState
-                || state.is(HARVESTABLE_CROPS)
-                || StrawgolemConfig.Harvesting.shouldHarvestBlocks.get() && state.getBlock() instanceof StemGrownBlock;
+    public static boolean isCropOrGourd(LevelAccessor level, @NotNull BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        boolean isCrop =  isGourdBlock(level, pos) || isCrop(state);
         if (StrawgolemConfig.Harvesting.enableWhitelist.get()) {
             return isCrop && isWhitelisted(state.getBlock());
         }
         return isCrop && !isBlacklisted(state.getBlock());
+    }
+
+    public static boolean isCrop(BlockState state) {
+        boolean isCrop = state.getBlock() instanceof CropBlock
+                || state.getBlock() instanceof HarvestableBlock
+                || state instanceof HarvestableState
+                || state.is(HARVESTABLE_CROPS);
+        if (StrawgolemConfig.Harvesting.enableWhitelist.get()) {
+            return isCrop && isWhitelisted(state.getBlock());
+        }
+        return isCrop && !isBlacklisted(state.getBlock());
+    }
+
+    public static boolean isGourdBlock(LevelAccessor level, @NotNull  BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        // Solid block
+        if (!state.isSolid()) return false;
+        // Has attached stem
+        for (Direction direction : Direction.values()) {
+            if (isValidStem(level, pos.offset(direction.getNormal()), direction.getOpposite())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean isBlacklisted(Block block) {

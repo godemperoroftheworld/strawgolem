@@ -49,7 +49,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.StemGrownBlock;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 //? if > 1.19.3 {
@@ -459,7 +458,7 @@ public class StrawGolem extends AbstractGolem implements
 
     public boolean isHoldingBlock() {
         Item item = heldItem.get().getItem();
-        return item instanceof BlockItem blockItem && blockItem.getBlock() instanceof StemGrownBlock;
+        return item instanceof BlockItem;
     }
 
     @SafeVarargs

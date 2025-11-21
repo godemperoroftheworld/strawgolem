@@ -20,7 +20,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.StemGrownBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -80,7 +79,7 @@ class HarvesterImpl<E extends Entity & ICapabilityHaver> extends AbstractCapabil
 
     @Override
     public boolean isHarvestingBlock() {
-        return isHarvesting() && getLevel().getBlockState(currentHarvestPos).getBlock() instanceof StemGrownBlock;
+        return isHarvesting() && CropUtil.isGourdBlock(getLevel(), currentHarvestPos);
     }
 
     @Override
@@ -138,8 +137,8 @@ class HarvesterImpl<E extends Entity & ICapabilityHaver> extends AbstractCapabil
     private void harvestBlock() {
         if (!getLevel().isClientSide && isHarvesting() && CropUtil.isGrownCrop(getLevel(), currentHarvestPos)) {
             BlockState state = getLevel().getBlockState(currentHarvestPos);
-            BlockState defaultState = state.getBlock() instanceof StemGrownBlock ? Blocks.AIR.defaultBlockState() : state.getBlock().defaultBlockState();
-            entity.setItemSlot(EquipmentSlot.MAINHAND, pickupLoot(state));
+            BlockState defaultState = CropUtil.isGourdBlock(getLevel(), currentHarvestPos) ? Blocks.AIR.defaultBlockState() : state.getBlock().defaultBlockState();
+            entity.setItemSlot(EquipmentSlot.MAINHAND, pickupLoot(getLevel(), currentHarvestPos));
             // Break block
             getLevel().destroyBlock(currentHarvestPos, false, entity);
             getLevel().setBlockAndUpdate(currentHarvestPos, defaultState);
@@ -150,8 +149,11 @@ class HarvesterImpl<E extends Entity & ICapabilityHaver> extends AbstractCapabil
         } else clearHarvest();
     }
 
-    private ItemStack pickupLoot(BlockState state) {
-        if (state.getBlock() instanceof StemGrownBlock) return new ItemStack(state.getBlock().asItem(), 1);
+    private ItemStack pickupLoot(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        if (CropUtil.isGourdBlock(level, pos)) {
+            return new ItemStack(state.getBlock().asItem(), 1);
+        }
         //? if < 1.20.1 {
         /*LootContext.Builder builder = new LootContext.Builder((ServerLevel) getLevel())
         *///?} else
