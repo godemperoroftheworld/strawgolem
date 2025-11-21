@@ -108,7 +108,7 @@ public class CropUtil {
                 || state.is(HARVESTABLE_CROPS)
                 || StrawgolemConfig.Harvesting.shouldHarvestBlocks.get() && state.getBlock() instanceof StemGrownBlock;
         if (StrawgolemConfig.Harvesting.enableWhitelist.get()) {
-            return isCrop || isWhitelisted(state.getBlock());
+            return isCrop && isWhitelisted(state.getBlock());
         }
         return isCrop && !isBlacklisted(state.getBlock());
     }

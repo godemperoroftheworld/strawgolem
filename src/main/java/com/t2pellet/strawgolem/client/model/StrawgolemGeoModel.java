@@ -5,7 +5,10 @@ import com.t2pellet.strawgolem.Constants;
 import com.t2pellet.strawgolem.StrawgolemConfig;
 import com.t2pellet.strawgolem.common.entity.StrawGolem;
 import com.t2pellet.strawgolem.common.entity.capabilities.decay.DecayState;
+import net.minecraft.client.model.ArmedModel;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.entity.HumanoidArm;
 //? if < 1.19.3 {
 /*import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
@@ -21,9 +24,9 @@ import software.bernie.geckolib.util.RenderUtils;
 //?}
 
 //? if < 1.19.3 {
-/*public class StrawgolemGeoModel extends AnimatedGeoModel<StrawGolem> {
+/*public class StrawgolemGeoModel extends AnimatedGeoModel<StrawGolem> implements ArmedModel {
 *///?} else
-public class StrawgolemGeoModel extends GeoModel<StrawGolem> {
+public class StrawgolemGeoModel extends GeoModel<StrawGolem> implements ArmedModel {
 
     private static final ResourceLocation modelResource = new ResourceLocation(Constants.MOD_ID, "geo/strawgolem.geo.json");
     private static final ResourceLocation animationResource = new ResourceLocation(Constants.MOD_ID, "animations/strawgolem.animation.json");
@@ -86,7 +89,8 @@ public class StrawgolemGeoModel extends GeoModel<StrawGolem> {
         //?}
     }
 
-    public void translateToHand(PoseStack poseStack) {
+    @Override
+    public void translateToHand(@NotNull HumanoidArm _ignore, @NotNull PoseStack poseStack) {
         //? if < 1.19.3 {
         /*var arms = (GeoBone) getBone("arms");
         var upper = (GeoBone) getBone("upper");

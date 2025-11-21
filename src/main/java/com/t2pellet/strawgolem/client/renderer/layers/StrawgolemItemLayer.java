@@ -6,18 +6,18 @@ import com.t2pellet.strawgolem.common.entity.StrawGolem;
 import com.t2pellet.strawgolem.common.entity.capabilities.held_item.HeldItem;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 //? if < 1.19.3 {
-/*import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
-import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+/*import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 *///?} else {
 import net.minecraft.world.item.ItemDisplayContext;
 import org.joml.Quaternionf;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
-import software.bernie.geckolib.renderer.GeoRenderer;
 import com.mojang.math.Axis;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.RenderType;
@@ -32,10 +32,7 @@ public class StrawgolemItemLayer extends GeoRenderLayer<StrawGolem> {
     private final StrawgolemGeoModel model;
 
     public StrawgolemItemLayer(
-            //? if < 1.19.3 {
-            /*IGeoRenderer<StrawGolem> entityRendererIn,
-            *///?} else
-            GeoRenderer<StrawGolem> entityRendererIn,
+            GeoEntityRenderer<StrawGolem> entityRendererIn,
             StrawgolemGeoModel model,
             ItemInHandRenderer itemInHandRenderer
     ) {
@@ -52,7 +49,11 @@ public class StrawgolemItemLayer extends GeoRenderLayer<StrawGolem> {
         HeldItem heldItem = golem.getHeldItem();
         if (heldItem.has()) {
             matrixStackIn.pushPose();
-            this.model.translateToHand(matrixStackIn);
+            //? if > 1.19.3 {
+            // Above 1.19.3 we are no longer implicitly rotating to the body rotation, must apply manually.
+            matrixStackIn.mulPose(Axis.YP.rotationDegrees(180.0F - golem.yBodyRot));
+            //?}
+            this.model.translateToHand(golem.getMainArm(), matrixStackIn);
             this.renderItem(matrixStackIn, bufferIn, packedLightIn, golem);
             matrixStackIn.popPose();
         }
@@ -64,12 +65,13 @@ public class StrawgolemItemLayer extends GeoRenderLayer<StrawGolem> {
         boolean isBlock = golem.isHoldingBlock();
         matrixStackIn.pushPose();
         float rotationAmount = isBlock ? -180.0F : -90.0F;
+        // Custom positioning/rotation
         //? if < 1.19.3 {
         /*Quaternion quaternion = Vector3f.XP.rotationDegrees(rotationAmount);
         *///?} else
         Quaternionf quaternion = Axis.XP.rotationDegrees(rotationAmount);
         matrixStackIn.mulPose(quaternion);
-        matrixStackIn.translate(0, holdAboveHead ? isBlock ? -0.3F : 0.0F : -0.45F, holdAboveHead ? isBlock ? 0.0F : 0.1F : -0.15F);
+        matrixStackIn.translate(0, holdAboveHead ? isBlock ? -0.3F : 0.0F : -0.45F, holdAboveHead ? isBlock ? 0.0F : 0.1F : -0.2F);
         matrixStackIn.scale(0.5F, 0.5F, 0.5F);
         this.itemInHandRenderer.renderItem(
                 golem,
