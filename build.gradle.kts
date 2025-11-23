@@ -73,14 +73,15 @@ base { archivesName.set(env.archivesBaseName) }
 class Relation(
     val group: String,
     val module: String,
-    val version: VersionRange,
-    val friendlyVersion: VersionRange = version,
-    val exclude: String = "",
-    val loader: String = "",
-    val modID: String = module,
-    val optional: Boolean = false,
-    val modrinth: String = modID,
-    val curseforge: String = modID,
+    val version: VersionRange, // Version for maven
+    val friendlyVersion: VersionRange = version, // Version for mod metadata
+    val exclude: String = "", // Groups to exclude.
+    val loader: String = "", // Mod loader. 'forge' or 'fabric'
+    val modID: String = module, // The mod id, if it differs from the module
+    val optional: Boolean = false, // Whether dependency is optional
+    val devOnly: Boolean = false, // Whether dependency should be logged in mod/publisher metadata
+    val modrinth: String = modID, // ID for modrinth relation
+    val curseforge: String = modID, // ID for curseforge relation
 ) {
 
     fun fabric(): String {
@@ -95,6 +96,14 @@ class Relation(
                 "ordering=\"${if (optional) "NONE" else "AFTER"}\"\n" +
                 "side=\"BOTH\"\n"
     }
+
+    fun neoforge(): String {
+        return "[[dependencies.${mod.id}]]\n" +
+                "modId=\"${modID}\"\n" +
+                "type=\"${if (optional) "optional" else "required" }\"\n" +
+                "versionRange=\"[${friendlyVersion.min},)\"\n" +
+                "ordering=\"${if (optional) "NONE" else "AFTER"}\"\n" +
+                "side=\"BOTH\"\n"    }
 }
 val relations: Array<Relation> = arrayOf(
     Relation("com.terraformersmc",
@@ -118,18 +127,20 @@ val relations: Array<Relation> = arrayOf(
         versionProperty("deps.api.jade"),
         versionProperty("deps.api.friendly.jade"),
         optional = true,
+        modID = "jade",
         modrinth = "nvQzSEkH"),
     Relation("curse.maven",
         "animal-feeding-trough-445838",
         versionProperty("deps.api.animal_feeding_trough"),
         versionProperty("deps.api.friendly.animal_feeding_trough"),
         optional = true,
+        modID = "animal_feeding_trough",
         loader = if (env.atLeast("1.20")) "" else "fabric",
         modrinth = "bRFWnJ87"),
     Relation("curse.maven",
         "architectury-api-419699",
         versionProperty("deps.api.architectury_api"),
-        versionProperty("deps.api.friendly.architectury_api"),
+        devOnly = true,
         optional = true,
         modrinth = "lhGA9TYQ"),
     Relation("maven.modrinth",
@@ -262,7 +273,7 @@ tasks.processResources {
     }
 
     // Dependencies
-    val apisForLoader = relations.filter { it.loader.isBlank() || env.loader == it.loader }
+    val apisForLoader = relations.filter { !it.devOnly && (it.loader.isBlank() || env.loader == it.loader) }
     val required = apisForLoader.filter { !it.optional }
     val optional = apisForLoader.filter { it.optional }
     fun fabricDependencies(apis: List<Relation>): String {
@@ -270,6 +281,9 @@ tasks.processResources {
         return "{\n    $result\n  }"
     }
     fun forgeDependencies(apis: List<Relation>): String {
+        if (env.isNeo) {
+            return apis.joinToString(separator = "\n") { it.neoforge() }
+        }
         return apis.joinToString(separator = "\n") { it.forge() }
     }
 
